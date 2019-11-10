@@ -1,0 +1,32 @@
+library(ggplot2)  
+# Bring in Orange Dataset for analysis.  
+data(Orange) 
+
+# Review Dataset.  
+head(Orange) 
+
+# Attach Orange dataset to simplify code .  
+attach(Orange) 
+# Part 1: Find the mean and median of circumference by tree group.  
+# We create subsets of data grouping by Tree, using the aggregate function to analyze data from column 3(circumference). We apply the mean & median function to these subsets.  
+aggregate(Orange[3], list(Orange$Tree), mean)  
+aggregate(Orange[3], list(Orange$Tree), median) 
+
+# Part 2: Create a scatterplot.  
+# Resorting Tree groups numerically for scatterplot purposes.  
+levels(Orange$Tree)  
+Orange$Tree <- factor(Orange$Tree, levels = c(1, 2, 3, 4, 5))  
+levels(Orange$Tree) 
+
+# Create scatterplot comparing age to circumference by Tree group using package ggplot2.  
+p <- ggplot(Orange, aes(x=age, y=circumference, shape=Tree, color=Tree)) + geom_point()  
+p <- p + xlab("Age of Tree (days)") + ylab("Circumference (mm)") + ggtitle("Circumference of Tree Based on Age") + guides(colour = guide_legend("Group"), shape = guide_legend("Group"))  
+p  
+
+# Part 3: Create a boxplot comparing circumference by Tree group.  
+# Reset Tree ordering back to original order for boxplot. This is so that boxplots appear in order of increasing circumference.  
+Orange$Tree <- factor(Orange$Tree, levels = c(3, 1, 5, 2, 4))  
+# Create boxplot of circumference by Tree group.  
+b <- ggplot(Orange, aes(Tree, circumference, fill = Tree)) + geom_boxplot()  
+b <- b + xlab("Tree Group") + ylab("Circumference (mm)") + ggtitle("Circumference of Tree Groups") + scale_fill_discrete(name="Group")  
+b  
