@@ -1,0 +1,123 @@
+---
+title: "Homework 3"
+author: "Matthew Thacker"
+date: "October 11, 2016"
+output:
+  html_document
+---
+#Introduction
+This contains code for my Doing Data Science Homework 3.  The data includes a vector called testdata and cigsales.csv.  Cigsales represents cigarette sales information broken down by state.
+
+#Important
+This data reside in directory 
+"c:/users/Matthew/Documents/DataScience/DDS/HW"
+
+```{r, echo=TRUE}
+setwd("c:/users/Matthew/Documents/DataScience/DDS/HW")
+read.csv('cigsales.csv', sep = ",")
+```
+
+###1.	 Using the testdata data vector you created for the Lecture 1 practice problems:
+```{r}
+testdata <- c(45.4, 44.2, 36.8, 35.1, 39.0, 60.0, 47.4, 41.1, 45.8, 35.6)
+```
+
+a.	Use logical referencing to calculate the standard deviation of only those values that are less than 45.
+```{r}
+sd(subset(testdata, testdata<45))
+```
+
+b.	Write an R command that will determine how many of the vector entries are less than 45. Display the command and its output.
+```{r}
+length(which(testdata < 45))
+```
+
+c.	Write an R command that will determine how many vector entries are greater than 40 but less than 55 (i.e. how many entries are between 40 and 55). Display the command and its output.
+```{r}
+length(which(testdata>40 & testdata<55))
+```
+
+d.	Write an R command that will calculate what proportion of the data vector has values exceeding 40.
+```{r}
+(length(which(testdata>40)) / length(testdata)) * 100
+```
+
+###2.	This exercise uses a file called cigsales.txt that contains state-level data regarding cigarette sales and other variables. 
+
+a.	The variable black indicates the percentage of a given state that is African-American. Using logical referencing, select from this data frame only those states that have over a 15% African-American population. What states get selected?
+```{r}
+cigsales = read.csv('cigsales.csv')
+subset(cigsales, black > 15, select=c(state, black))
+```
+
+b.	Extract the variable price from this data frame, and place it into a vector of its own called price.vec.
+```{r}
+price.vec <- cigsales$price
+```
+
+c.	Use logical referencing to create two separate vectors in R: A vector called poor containing only the income values that fall below the median income value for all the states; and a vector called rich containing only the income values that fall above the median income value for all the states.
+```{r}
+poor <- subset(cigsales, income<median(income))
+rich <- subset(cigsales, income>median(income))
+```
+
+###3.	Run the R code examples below and write a brief statement about what each example does.
+
+a.	Example 1:
+```{r}
+trim <- function(x, lower = 0.0, upper = 1.0) {
+ indicies <- x >= lower & x <= upper
+ return(x[indicies])
+}
+```
+
+This code creates a function called trim that takes variable x and by default trims values below zero and above one.  It then returns or displays all numeric values that were kept.
+
+b.	Example 2:
+```{r}
+trim <- function(x, lower = 0.0, upper = 1.0) x[x >= lower & x <= upper]
+```
+
+This is identical to part a.  The brackets are another way of indicating indicies. 
+
+c.	Example 3:
+```{r}
+sumdice <- function(n) {
+k <- sample(1:6, size=n, replace=TRUE)
+return(sum(k))
+}
+```
+
+This creates a function called sumdice that simulates the random sum of values from rolling two dice. n represents the number of times the dice will be rolled.  Sample is a standard function that creates a sample of the specified size from the elements of x using permutations.  Replace=True means that values can repeat, so that even if you roll a two and a four, those same values can be reused. In other words, the numbers are replaced back into the bucket with each sample.  1:6 is the range of numbers that could appear in the sample. 
+
+###4.	On average, how many dots would you expect to see when you roll a fair six-sided die? How can you use the function sumdice() to get a reliable estimate of the average ("expected") number of dots?
+
+3  you could put sumdice inside a means function. 
+
+###5.	Examine the following piece of R code. What is the difference between the variable x and the variable y? (Note: I am not asking for a number. I am asking for the difference in how they function within the code below. Write your answer in sentence form.).
+```{r}
+x <- 42
+fred <- function(y) {
+ x <- y
+ return(y + x)
+ }
+fred(13)
+```
+
+The variable x is identified as the value 42. The variable y within fred means that whatever value is entered for y, will also be the value for x.  The function will add x and 7 and display the sum of those two numbers.  Since x and y will always be the same number in this case fred essentially multiplies whatever y value entered by 2.
+
+###6.	Create an R function named diff() that calculates the absolute difference between the mean and median of a sample of values stored in a vector. Then, run your function on the price.vec vector from part 2b.
+
+```{r}
+diff <- function(x){mean(x)-median(x)}
+diff(price.vec)
+```
+
+###7.	Here is a very simple loop in R. Run this code and tell me what it does:
+```{r}
+for (i in 1:20) {
+print(i+3)
+}
+```
+
+This loop goes from one to twenty and adds three to each value.  The printout displays the numbers 4-23.
